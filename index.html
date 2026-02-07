@@ -244,11 +244,13 @@
         });
     }
 
-    function playEffect(item) {
+   function playEffect(item) {
         const txt = document.getElementById('char-name');
         const bigNum = document.getElementById('big-number');
 
-        if (currentAudio) { currentAudio.pause(); currentAudio.currentTime = 0; }
+        // Para o áudio anterior antes de tocar o novo
+        currentAudio.pause();
+        currentAudio.currentTime = 0;
 
         if (currentMode === 'num') {
             txt.style.display = 'none';
@@ -261,11 +263,16 @@
             txt.innerText = item.nome;
         }
 
-        currentAudio = new Audio(item.som);
-        currentAudio.play().catch(e => console.log("Som não encontrado"));
+        // Configuração de áudio para máxima compatibilidade
+        currentAudio.src = item.som;
+        currentAudio.preload = 'auto';
+        currentAudio.play().catch(e => {
+            console.warn("Erro ao reproduzir áudio. Verifique se o nome do arquivo no GitHub é exatamente: " + item.som);
+        });
     }
 
     render();
 </script>
 </body>
+
 </html>
