@@ -2,27 +2,14 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Telefone Mágico Kids</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Telefone Mágico com Fotos</title>
     <style>
         :root {
             --phone-color: #6c5ce7;
             --screen-color: #ffffff;
             --button-color: #fab1a0;
             --call-btn-color: #55efc4;
-            --text-color: #2d3436;
-        }
-
-        /* Bloqueio de seleção e menus nativos */
-        * {
-            -webkit-touch-callout: none; /* iOS Safari */
-            -webkit-user-select: none;   /* Safari */
-            -khtml-user-select: none;    /* Konqueror HTML */
-            -moz-user-select: none;      /* Firefox */
-            -ms-user-select: none;       /* Internet Explorer/Edge */
-            user-select: none;           /* Geral */
-            -webkit-tap-highlight-color: transparent; /* Remove brilho ao tocar */
-            touch-action: manipulation; /* Evita zoom duplo */
         }
 
         body {
@@ -33,51 +20,42 @@
             min-height: 100vh;
             margin: 0;
             background-color: #dfe6e9;
-            overflow: hidden; /* Evita rolagem acidental */
         }
 
         .phone {
             background-color: var(--phone-color);
-            width: 90%;
-            max-width: 350px;
+            width: 320px;
             padding: 30px 15px;
-            border-radius: 50px;
-            box-shadow: 0 15px 0 #4834d4, 0 25px 15px rgba(0,0,0,0.2);
+            border-radius: 40px;
+            box-shadow: 0 15px 0 #4834d4;
             text-align: center;
         }
 
-        /* Tela com Imagem e Texto */
+        /* Tela que comporta imagem e texto */
         .screen {
             background-color: var(--screen-color);
-            min-height: 160px;
+            min-height: 150px;
             margin-bottom: 25px;
-            border-radius: 25px;
-            border: 5px solid #341f97;
+            border-radius: 20px;
+            border: 4px solid #341f97;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             padding: 10px;
-            color: var(--text-color);
+            color: #2d3436;
         }
 
         .screen img {
-            width: 90px;
-            height: 90px;
+            width: 80px;
+            height: 80px;
             border-radius: 50%;
             margin-bottom: 10px;
-            display: none; /* Oculta até clicar */
+            display: none; /* Escondida até clicar */
             object-fit: cover;
             border: 3px solid var(--phone-color);
-            pointer-events: none; /* Impede arrastar a imagem */
         }
 
-        .screen-text {
-            font-size: 1.2rem;
-            font-weight: bold;
-        }
-
-        /* Teclado Numérico */
         .keypad {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -88,13 +66,12 @@
             background-color: var(--button-color);
             border: none;
             padding: 20px 5px;
-            border-radius: 20px;
-            font-size: 2rem;
+            border-radius: 15px;
+            font-size: 1.8rem;
             font-weight: bold;
-            color: #2d3436;
             cursor: pointer;
             box-shadow: 0 6px 0 #e17055;
-            transition: transform 0.1s, box-shadow 0.1s;
+            transition: all 0.1s;
         }
 
         .btn:active {
@@ -102,100 +79,82 @@
             transform: translateY(4px);
         }
 
-        /* Botão de Chamar Diferenciado */
         .btn-call {
             grid-column: span 3;
             background-color: var(--call-btn-color);
             box-shadow: 0 6px 0 #00b894;
             margin-top: 10px;
             font-size: 1.5rem;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 10px;
         }
 
-        .btn-call:active {
-            box-shadow: 0 2px 0 #00b894;
+        @media (max-width: 350px) {
+            .phone { width: 90%; }
         }
     </style>
 </head>
-<body oncontextmenu="return false;"> <div class="phone">
+<body>
+
+    <div class="phone">
         <div class="screen" id="screen-content">
             <img id="char-img" src="" alt="Personagem">
-            <div id="display-text" class="screen-text">Quem vamos chamar?</div>
+            <div id="display-text">Quem vamos chamar?</div>
         </div>
         
         <div class="keypad">
-            <button class="btn" onclick="playPhone('1', 'Popipi', 'popipi.png')">1</button>
-            <button class="btn" onclick="playPhone('2', 'Lulu', 'lulu.png')">2</button>
-            <button class="btn" onclick="playPhone('3', 'Bibi', 'bibi.png')">3</button>
-            <button class="btn" onclick="playPhone('4', 'Totó', 'toto.png')">4</button>
-            <button class="btn" onclick="playPhone('5', 'Miau', 'miau.png')">5</button>
-            <button class="btn" onclick="playPhone('6', 'Dudu', 'dudu.png')">6</button>
-            <button class="btn" onclick="playPhone('7', 'Piu-piu', 'piu.png')">7</button>
-            <button class="btn" onclick="playPhone('8', 'Zazá', 'zaza.png')">8</button>
-            <button class="btn" onclick="playPhone('9', 'Kadu', 'kadu.png')">9</button>
+            <button class="btn" onclick="playSound('1', 'Popipi', 'popipi.jpg')">1</button>
+            <button class="btn" onclick="playSound('2', 'Lulu', 'lulu.jpg')">2</button>
+            <button class="btn" onclick="playSound('3', 'Bibi', 'bibi.jpg')">3</button>
+            <button class="btn" onclick="playSound('4', 'Totó', 'toto.jpg')">4</button>
+            <button class="btn" onclick="playSound('5', 'Miau', 'miau.jpg')">5</button>
+            <button class="btn" onclick="playSound('6', 'Dudu', 'dudu.jpg')">6</button>
+            <button class="btn" onclick="playSound('7', 'Piu-piu', 'piu.jpg')">7</button>
+            <button class="btn" onclick="playSound('8', 'Zazá', 'zaza.jpg')">8</button>
+            <button class="btn" onclick="playSound('9', 'Kadu', 'kadu.jpg')">9</button>
             
-            <button class="btn btn-call" onclick="playPhone('call', 'Chamando...', 'fone.png')">
-                <span>📞</span> CHAMAR
-            </button>
+            <button class="btn btn-call" onclick="playSound('call', 'Chamando...', 'fone.jpg')">📞 CHAMAR</button>
         </div>
     </div>
 
-    <div id="audio-container">
-        <audio id="audio-1" src="som1.mp3" preload="auto"></audio>
-        <audio id="audio-2" src="som2.mp3" preload="auto"></audio>
-        <audio id="audio-3" src="som3.mp3" preload="auto"></audio>
-        <audio id="audio-4" src="som4.mp3" preload="auto"></audio>
-        <audio id="audio-5" src="som5.mp3" preload="auto"></audio>
-        <audio id="audio-6" src="som6.mp3" preload="auto"></audio>
-        <audio id="audio-7" src="som7.mp3" preload="auto"></audio>
-        <audio id="audio-8" src="som8.mp3" preload="auto"></audio>
-        <audio id="audio-9" src="som9.mp3" preload="auto"></audio>
-        <audio id="audio-call" src="chamada.mp3" preload="auto"></audio>
-    </div>
+    <audio id="audio-1" src="som1.mp3"></audio>
+    <audio id="audio-2" src="som2.mp3"></audio>
+    <audio id="audio-3" src="som3.mp3"></audio>
+    <audio id="audio-4" src="som4.mp3"></audio>
+    <audio id="audio-5" src="som5.mp3"></audio>
+    <audio id="audio-6" src="som6.mp3"></audio>
+    <audio id="audio-7" src="som7.mp3"></audio>
+    <audio id="audio-8" src="som8.mp3"></audio>
+    <audio id="audio-9" src="som9.mp3"></audio>
+    <audio id="audio-call" src="chamada.mp3"></audio>
 
     <script>
         let currentAudio = null;
 
-        function playPhone(id, name, imgSrc) {
+        function playSound(id, name, imgSrc) {
             const textDisplay = document.getElementById('display-text');
             const imgDisplay = document.getElementById('char-img');
             const audio = document.getElementById('audio-' + id);
 
-            // 1. Interrompe qualquer som atual imediatamente
+            // Parar áudio anterior
             if (currentAudio) {
                 currentAudio.pause();
                 currentAudio.currentTime = 0;
             }
 
-            // 2. Atualiza a Interface
+            // Atualizar Tela
             textDisplay.innerText = "Falando com: " + name;
             imgDisplay.src = imgSrc;
-            imgDisplay.style.display = "block";
+            imgDisplay.style.display = "block"; // Mostra a imagem
 
-            // 3. Toca o novo som
-            audio.play().catch(error => {
-                console.log("Aguardando interação ou arquivos mp3 ausentes.");
-            });
+            // Tocar Áudio
+            audio.play().catch(e => console.log("Erro ao tocar: certifique-se de que os arquivos existem."));
             currentAudio = audio;
 
-            // 4. Reseta a tela ao terminar a fala
+            // Ao terminar o som
             audio.onended = () => {
                 textDisplay.innerText = "Quem vamos chamar?";
-                imgDisplay.style.display = "none";
-                currentAudio = null;
+                imgDisplay.style.display = "none"; // Esconde a imagem
             };
         }
-
-        // Bloqueio extra via Script contra menus de seleção
-        document.addEventListener('contextmenu', event => event.preventDefault());
-        
-        // Impede zoom de pinça (pinch zoom) para não desconfigurar o layout
-        document.addEventListener('touchmove', function (event) {
-            if (event.scale !== 1) { event.preventDefault(); }
-        }, { passive: false });
     </script>
 
 </body>
