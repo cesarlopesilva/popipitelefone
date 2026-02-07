@@ -1,0 +1,21 @@
+{
+  "name": "Popipi Mobile",
+  "short_name": "Popipi",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#70e1ca",
+  "theme_color": "#f1c40f",
+  "description": "App educativo e divertido para crianças.",
+  "icons": [
+    {
+      "src": "logo.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "logo.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
