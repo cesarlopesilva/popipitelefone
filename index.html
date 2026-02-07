@@ -11,7 +11,11 @@
             --topo-cor: #f1c40f;
         }
 
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        * { 
+            box-sizing: border-box; 
+            -webkit-tap-highlight-color: transparent; 
+            user-select: none;
+        }
 
         body {
             font-family: 'Arial Rounded MT Bold', sans-serif;
@@ -43,7 +47,6 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            z-index: 10;
         }
 
         .logo { height: 35px; width: auto; }
@@ -74,7 +77,6 @@
             font-weight: 900;
             display: none;
             -webkit-text-stroke: 6px var(--borda);
-            filter: drop-shadow(5px 5px 0px rgba(0,0,0,0.2));
         }
 
         .display-screen p { 
@@ -83,7 +85,6 @@
             font-weight: 900; 
             margin: 0; 
             padding: 0 15px;
-            line-height: 1.2;
         }
 
         .keypad {
@@ -104,7 +105,7 @@
             cursor: pointer;
             box-shadow: 0 5px 0 var(--borda);
             text-shadow: 2px 2px 0 var(--borda);
-            height: 60px;
+            height: 65px;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -119,12 +120,11 @@
         .mode-mag .btn { background-color: #a29bfe; }
 
         .nav-footer {
-            height: 85px;
+            height: 90px;
             display: grid;
             grid-template-columns: repeat(4, 1fr);
             align-items: flex-end;
             padding: 0 5px;
-            background: rgba(0,0,0,0.05);
         }
 
         .nav-tab {
@@ -144,7 +144,7 @@
         .tab-ani { background-color: #ff9ff3; }
         .tab-mag { background-color: #a29bfe; }
 
-        .nav-tab.active { height: 80px; }
+        .nav-tab.active { height: 85px; }
     </style>
 </head>
 <body>
@@ -171,7 +171,7 @@
 </div>
 
 <script>
-    let currentAudio = null;
+    let currentAudio = new Audio();
     let currentMode = 'tel';
 
     const numColors = {
@@ -196,10 +196,18 @@
             const n = i === 9 ? 0 : i + 1;
             return { label: n, nome: 'Número ' + n, som: n + '.mp3' };
         }),
-        ani: Array.from({length: 10}, (_, i) => {
-            const icons = ['🐱','🐶','🐮','🐷','🦁','🐥','🐸','🐵','🐘','🦆'];
-            return { label: icons[i], nome: 'Som de Animal', som: `ani${i}.mp3` };
-        }),
+        ani: [
+            { label: '🐱', nome: 'Som de Gato', som: 'ani0.mp3' },
+            { label: '🐶', nome: 'Som de Cão', som: 'ani1.mp3' },
+            { label: '🐮', nome: 'Som de Vaca', som: 'ani2.mp3' },
+            { label: '🐷', nome: 'Som de Porco', som: 'ani3.mp3' },
+            { label: '🦁', nome: 'Som de Leão', som: 'ani4.mp3' },
+            { label: '🐥', nome: 'Som de Pinto', som: 'ani5.mp3' },
+            { label: '🐸', nome: 'Som de Sapo', som: 'ani6.mp3' },
+            { label: '🐵', nome: 'Som de Macaco', som: 'ani7.mp3' },
+            { label: '🐘', nome: 'Som de Elefante', som: 'ani8.mp3' },
+            { label: '🦆', nome: 'Som de Pato', som: 'ani9.mp3' }
+        ],
         mag: [
             { label: '❤️', nome: 'Eu te amo muito!', som: 'mag0.mp3' },
             { label: '🙏', nome: 'Muito obrigado!', som: 'mag1.mp3' },
@@ -226,7 +234,7 @@
         txt.style.display = 'block';
         
         if (mode === 'tel') txt.innerText = "Oi, amiguinho!";
-        else if (mode === 'mag') txt.innerText = "Palavra Mágica";
+        else if (mode === 'mag') txt.innerText = "Palavras Mágicas";
         else txt.innerText = "Popipi Mobile";
         
         render();
@@ -244,11 +252,13 @@
         });
     }
 
-   function playEffect(item) {
+    function playEffect(item) {
         const txt = document.getElementById('char-name');
         const bigNum = document.getElementById('big-number');
 
-        // 1. Atualiza a tela primeiro (visual imediato)
+        currentAudio.pause();
+        currentAudio.currentTime = 0;
+
         if (currentMode === 'num') {
             txt.style.display = 'none';
             bigNum.style.display = 'block';
@@ -260,32 +270,11 @@
             txt.innerText = item.nome;
         }
 
-        // 2. Toca o som de forma direta
-        try {
-            // Se houver áudio tocando, para e reseta
-            currentAudio.pause();
-            
-            // Adicionamos um pequeno sufixo para limpar o cache do navegador no GitHub
-            // e carregamos o novo arquivo
-            currentAudio.src = item.som + "?v=" + Math.floor(Math.random() * 1000);
-            
-            // Tenta dar o play imediatamente
-            const playPromise = currentAudio.play();
-
-            if (playPromise !== undefined) {
-                playPromise.catch(error => {
-                    console.log("Aguardando interação do usuário para tocar som.");
-                });
-            }
-        } catch (e) {
-            console.error("Erro ao carregar áudio:", e);
-        }
+        currentAudio.src = item.som;
+        currentAudio.play().catch(e => console.log("Erro ao tocar:", item.som));
     }
 
     render();
 </script>
 </body>
-
 </html>
-
-
