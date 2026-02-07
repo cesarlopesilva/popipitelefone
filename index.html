@@ -11,10 +11,16 @@
             --topo-cor: #f1c40f;
         }
 
+        /* BLOQUEIO DE SELEÇÃO E MENUS NATIVOS */
         * { 
             box-sizing: border-box; 
             -webkit-tap-highlight-color: transparent; 
-            user-select: none;
+            -webkit-touch-callout: none; /* Impede menu nativo no iOS */
+            -webkit-user-select: none;   /* Impede seleção no Chrome/Safari */
+            -khtml-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;           /* Impede seleção de texto */
         }
 
         body {
@@ -147,9 +153,7 @@
         .nav-tab.active { height: 85px; }
     </style>
 </head>
-<body>
-
-<div class="phone-frame">
+<body oncontextmenu="return false;"> <div class="phone-frame">
     <div class="header">
         <img src="logo.png" alt="Popipi" class="logo">
     </div>
@@ -275,6 +279,9 @@
     }
 
     render();
+
+    // Bloqueia menu de contexto em todo o documento
+    document.addEventListener('contextmenu', event => event.preventDefault());
 </script>
 </body>
 </html>
