@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Popipi Mobile</title>
+    <style>
+        :root {
+            --borda: #1a1a1a;
+            --fundo-verde: #70e1ca;
+            --topo-cor: #f1c40f;
+        }
+
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+        body {
+            font-family: 'Arial Rounded MT Bold', sans-serif;
+            background-color: #222;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100dvh;
+            overflow: hidden;
+        }
+
+        .phone-frame {
+            background-color: var(--fundo-verde);
+            width: 100%;
+            max-width: 430px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            border: 6px solid var(--borda);
+            background-image: radial-gradient(#5bc9b2 15%, transparent 15%);
+            background-size: 20px 20px;
+        }
+
+        .header {
+            background-color: var(--topo-cor);
+            height: 60px;
+            border-bottom: 5px solid var(--borda);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10;
+        }
+
+        .logo { height: 35px; width: auto; }
+
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-evenly;
+            padding: 5px 0;
+        }
+
+        .display-screen {
+            background: white !important;
+            margin: 0 20px;
+            height: 160px;
+            border-radius: 30px;
+            border: 5px solid var(--borda);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: inset 0 8px 0 rgba(0,0,0,0.05);
+            text-align: center;
+        }
+
+        #big-number {
+            font-size: 130px;
+            font-weight: 900;
+            display: none;
+            -webkit-text-stroke: 6px var(--borda);
+            filter: drop-shadow(5px 5px 0px rgba(0,0,0,0.2));
+        }
+
+        .display-screen p { 
+            font-size: 1.6rem; 
+            color: var(--borda); 
+            font-weight: 900; 
+            margin: 0; 
+            padding: 0 15px;
+            line-height: 1.2;
+        }
+
+        .keypad {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            padding: 5px 20px;
+        }
+
+        .btn:nth-child(10) { grid-column: 2; }
+
+        .btn {
+            border: 4px solid var(--borda);
+            border-radius: 18px;
+            font-size: 1.8rem;
+            color: white;
+            font-weight: 900;
+            cursor: pointer;
+            box-shadow: 0 5px 0 var(--borda);
+            text-shadow: 2px 2px 0 var(--borda);
+            height: 60px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: 0.1s;
+        }
+
+        .btn:active { transform: translateY(3px); box-shadow: 0 2px 0 var(--borda); }
+
+        .mode-tel .btn { background-color: #ff7675; }
+        .mode-num .btn { background-color: #fdcb6e; }
+        .mode-ani .btn { background-color: #55efc4; }
+        .mode-mag .btn { background-color: #a29bfe; }
+
+        .nav-footer {
+            height: 85px;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            align-items: flex-end;
+            padding: 0 5px;
+            background: rgba(0,0,0,0.05);
+        }
+
+        .nav-tab {
+            height: 65px;
+            border: 4px solid var(--borda);
+            border-bottom: none;
+            border-radius: 15px 15px 0 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.8rem;
+            cursor: pointer;
+        }
+
+        .tab-tel { background-color: #81ecec; }
+        .tab-num { background-color: #f1c40f; }
+        .tab-ani { background-color: #ff9ff3; }
+        .tab-mag { background-color: #a29bfe; }
+
+        .nav-tab.active { height: 80px; }
+    </style>
+</head>
+<body>
+
+<div class="phone-frame">
+    <div class="header">
+        <img src="logo.png" alt="Popipi" class="logo">
+    </div>
+
+    <div class="main-content">
+        <div id="screen" class="display-screen">
+            <div id="big-number"></div>
+            <p id="char-name">Oi, amiguinho!</p>
+        </div>
+        <div id="keypad" class="keypad mode-tel"></div>
+    </div>
+
+    <div class="nav-footer">
+        <div class="nav-tab tab-tel active" onclick="changeMode('tel', this)">📞</div>
+        <div class="nav-tab tab-num" onclick="changeMode('num', this)">123</div>
+        <div class="nav-tab tab-ani" onclick="changeMode('ani', this)">🐶</div>
+        <div class="nav-tab tab-mag" onclick="changeMode('mag', this)">✨</div>
+    </div>
+</div>
+
+<script>
+    let currentAudio = null;
+    let currentMode = 'tel';
+
+    const numColors = {
+        '1': '#ff4757', '2': '#2ed573', '3': '#f1c40f', '4': '#54a0ff', '5': '#ef5777',
+        '6': '#8854d0', '7': '#ffa502', '8': '#2bcbba', '9': '#eb4d4b', '0': '#7158e2'
+    };
+
+    const library = {
+        tel: [
+            { label: 1, nome: 'Oi, amiguinho!', som: 'tel1.mp3' },
+            { label: 2, nome: 'Tudo bem?', som: 'tel2.mp3' },
+            { label: 3, nome: 'Alô!', som: 'tel3.mp3' },
+            { label: 4, nome: 'Quem fala daí?', som: 'tel4.mp3' },
+            { label: 5, nome: 'Vamos brincar hoje?', som: 'tel5.mp3' },
+            { label: 6, nome: 'Até logo!', som: 'tel6.mp3' },
+            { label: 7, nome: 'Eu adoro o seu sorriso!', som: 'tel7.mp3' },
+            { label: 8, nome: 'Você é nota dez!', som: 'tel8.mp3' },
+            { label: 9, nome: 'Tchau tchau!', som: 'tel9.mp3' },
+            { label: 0, nome: 'Estou tão feliz em falar com você!', som: 'tel0.mp3' }
+        ],
+        num: Array.from({length: 10}, (_, i) => {
+            const n = i === 9 ? 0 : i + 1;
+            return { label: n, nome: 'Número ' + n, som: n + '.mp3' };
+        }),
+        ani: Array.from({length: 10}, (_, i) => {
+            const icons = ['🐱','🐶','🐮','🐷','🦁','🐥','🐸','🐵','🐘','🦆'];
+            return { label: icons[i], nome: 'Som de Animal', som: `ani${i}.mp3` };
+        }),
+        mag: [
+            { label: '❤️', nome: 'Eu te amo muito!', som: 'mag0.mp3' },
+            { label: '🙏', nome: 'Muito obrigado!', som: 'mag1.mp3' },
+            { label: '☀️', nome: 'Bom dia!', som: 'mag2.mp3' },
+            { label: '🤝', nome: 'Por favor!', som: 'mag3.mp3' },
+            { label: '😊', nome: 'Boa tarde!', som: 'mag4.mp3' },
+            { label: '🌈', nome: 'Com licença!', som: 'mag5.mp3' },
+            { label: '🌙', nome: 'Boa noite!', som: 'mag6.mp3' },
+            { label: '🧸', nome: 'Me desculpa!', som: 'mag7.mp3' },
+            { label: '✨', nome: 'Você é muito especial!', som: 'mag8.mp3' },
+            { label: '⭐', nome: 'Brilhe sempre!', som: 'mag9.mp3' }
+        ]
+    };
+
+    function changeMode(mode, el) {
+        currentMode = mode;
+        document.querySelectorAll('.nav-tab').forEach(tab => tab.classList.remove('active'));
+        el.classList.add('active');
+        document.getElementById('keypad').className = `keypad mode-${mode}`;
+        
+        const txt = document.getElementById('char-name');
+        const bigNum = document.getElementById('big-number');
+        bigNum.style.display = 'none';
+        txt.style.display = 'block';
+        
+        if (mode === 'tel') txt.innerText = "Oi, amiguinho!";
+        else if (mode === 'mag') txt.innerText = "Palavra Mágica";
+        else txt.innerText = "Popipi Mobile";
+        
+        render();
+    }
+
+    function render() {
+        const keypad = document.getElementById('keypad');
+        keypad.innerHTML = '';
+        library[currentMode].forEach(item => {
+            const b = document.createElement('button');
+            b.className = 'btn';
+            b.innerHTML = item.label;
+            b.onclick = () => playEffect(item);
+            keypad.appendChild(b);
+        });
+    }
+
+    function playEffect(item) {
+        const txt = document.getElementById('char-name');
+        const bigNum = document.getElementById('big-number');
+
+        if (currentAudio) { currentAudio.pause(); currentAudio.currentTime = 0; }
+
+        if (currentMode === 'num') {
+            txt.style.display = 'none';
+            bigNum.style.display = 'block';
+            bigNum.innerText = item.label;
+            bigNum.style.color = numColors[item.label];
+        } else {
+            bigNum.style.display = 'none';
+            txt.style.display = 'block';
+            txt.innerText = item.nome;
+        }
+
+        currentAudio = new Audio(item.som);
+        currentAudio.play().catch(e => console.log("Som não encontrado"));
+    }
+
+    render();
+</script>
+</body>
+</html>
