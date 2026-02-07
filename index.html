@@ -27,6 +27,24 @@
             align-items: center;
             height: 100dvh;
             overflow: hidden;
+            /* ... suas outras regras ... */
+    
+    /* Bloqueia a seleção de texto e menus nativos */
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none;   /* Safari */
+    -khtml-user-select: none;    /* Konqueror HTML */
+    -moz-user-select: none;      /* Firefox */
+    -ms-user-select: none;       /* Internet Explorer/Edge */
+    user-select: none;           /* Non-prefixed version, currently supported by Chrome and Opera */
+    
+    /* Remove o realce azul ao tocar em botões no Android/iOS */
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* Garante que as imagens também não possam ser "arrastadas" ou selecionadas */
+img {
+    pointer-events: none;
+}
         }
 
         .phone-frame {
@@ -174,7 +192,17 @@
 <script>
     let currentAudio = new Audio();
     let currentMode = 'tel';
+// Bloqueia o menu de contexto (clique direito ou toque longo)
+document.addEventListener('contextmenu', function(event) {
+    event.preventDefault();
+}, false);
 
+// Opcional: Bloqueia gestos de zoom com dois dedos (comum em crianças)
+document.addEventListener('touchstart', function (event) {
+    if (event.touches.length > 1) {
+        event.preventDefault();
+    }
+}, { passive: false });
     const numColors = {
         '1': '#ff4757', '2': '#2ed573', '3': '#f1c40f', '4': '#54a0ff', '5': '#ef5777',
         '6': '#8854d0', '7': '#ffa502', '8': '#2bcbba', '9': '#eb4d4b', '0': '#7158e2'
@@ -279,5 +307,6 @@
 </script>
 </body>
 </html>
+
 
 
