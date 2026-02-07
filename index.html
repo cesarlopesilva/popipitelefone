@@ -248,9 +248,10 @@
         const txt = document.getElementById('char-name');
         const bigNum = document.getElementById('big-number');
 
-        // Para o áudio anterior antes de tocar o novo
+        // Reset do áudio
         currentAudio.pause();
-        currentAudio.currentTime = 0;
+        currentAudio.src = ""; // Limpa a fonte anterior para liberar memória
+        currentAudio.load(); 
 
         if (currentMode === 'num') {
             txt.style.display = 'none';
@@ -263,12 +264,17 @@
             txt.innerText = item.nome;
         }
 
-        // Configuração de áudio para máxima compatibilidade
-        currentAudio.src = item.som;
+        // Nova tentativa de carga forçada
+        currentAudio.src = item.som + "?v=" + Date.now(); // O "?v=" evita que o navegador use um cache corrompido
         currentAudio.preload = 'auto';
-        currentAudio.play().catch(e => {
-            console.warn("Erro ao reproduzir áudio. Verifique se o nome do arquivo no GitHub é exatamente: " + item.som);
-        });
+        
+        // Tenta tocar apenas quando o navegador confirmar que tem dados suficientes
+        currentAudio.oncanplaythrough = () => {
+            currentAudio.play().catch(e => console.log("Aguardando interação..."));
+        };
+
+        // Força o carregamento manual
+        currentAudio.load();
     }
 
     render();
@@ -276,3 +282,4 @@
 </body>
 
 </html>
+
